@@ -8,3 +8,5 @@ UCR CS 179I Senior Design Project
 ## Authors
 Adam Chao
 Jeffrey Ng
+
+jng017
