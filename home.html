@@ -21,12 +21,14 @@
   <script type="text/javascript">
     var player;
     var options;
+    var channels = ['monstercat', 'food', 'twitchplayspokemon'];
+    var channelidx = 0;
 
     window.onload = function() {
       options = {
         width: "100%",
         height: "100%",
-        channel: "monstercat"
+        channel: channels[0]
       };
       player = new Twitch.Player("main-player", options);
       player.setVolume(0.5);
@@ -44,12 +46,61 @@
     }
 
     function nextChannel() {
-      player.setChannel('food');
+      channelidx += 1;
+      if (channelidx >= channels.length) {
+        channelidx = 0;
+      }
+      player.setChannel(channels[channelidx]);
     }
 
     function prevChannel() {
-      player.setChannel('monstercat');
+      channelidx -= 1;
+      if (channelidx <= 0) {
+        channelidx = channels.length - 1;
+      }
+      player.setChannel(channels[channelidx]);
     }
+
+    function setChannels(callback) {
+      //add channels to local array
+      data = JSON.parse(callback);
+    }
+
+    function getFollows() {
+      var code = getCookie('code');
+      console.log('code ' + code);
+      callAjax('http://ttvision.cc/api?code='+code, setChannels(callback));
+    }
+    //https://stackoverflow.com/questions/8567114/how-to-make-an-ajax-call-without-jquery
+    function callAjax(url, callback){
+      var xmlhttp;
+      // compatible with IE7+, Firefox, Chrome, Opera, Safari
+      xmlhttp = new XMLHttpRequest();
+      xmlhttp.onreadystatechange = function(){
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200){
+            callback(xmlhttp.responseText);
+        }
+      }
+      xmlhttp.open("GET", url, true);
+      xmlhttp.send();
+    }
+
+    //http://www.w3schools.com/js/js_cookies.asp
+    function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return "";
+}
   </script>
 </head>
 
@@ -75,7 +126,7 @@
         <a class="button" id="mute" href="#" onclick="toggleMute()"><i class="fa fa-volume-off fa-lg"></i><i class="fa fa-ban fa-stack-lg"></i> Unmute</a>
       </div>
       <div class="column column-25">
-        <a class="button" id="dunno" href="#"><i class="fa fa-refresh"></i> refresh</a>
+        <a class="button" id="dunno" href="#" onclick="getFollows()"><i class="fa fa-refresh"></i> refresh</a>
       </div>
       <div class="column column-25">
         <a class="button" id="next" href="#" onclick="nextChannel()"><i class="fa fa-fast-forward"></i> Next Channel</a>
