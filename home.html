@@ -62,31 +62,28 @@
       player.setChannel(channels[channelidx]);
     }
 
-    function setChannels(callback) {
+    function setChannels(body) {
       //add channels to local array
-      data = JSON.parse(callback);
-      channels = data.channels;
+      //data = JSON.parse(body);
+      //console.log('data ' + body)
+      channels = body.channels;
       channelidx = 0;
       player.setChannel(channels[channelidx]);
     }
 
     function getFollows() {
       var code = getCookie('code');
-      console.log('code ' + code);
-      callAjax('http://ttvision.cc/api?code='+code, setChannels(callback));
-    }
-    //https://stackoverflow.com/questions/8567114/how-to-make-an-ajax-call-without-jquery
-    function callAjax(url, callback){
-      var xmlhttp;
-      // compatible with IE7+, Firefox, Chrome, Opera, Safari
-      xmlhttp = new XMLHttpRequest();
-      xmlhttp.onreadystatechange = function(){
-        if (xmlhttp.readyState == 4 && xmlhttp.status == 200){
-            callback(xmlhttp.responseText);
-        }
+      //console.log('code ' + code);
+      var opts = {
+        method: 'GET',
+        headers: {}
       }
-      xmlhttp.open("GET", url, true);
-      xmlhttp.send();
+      fetch('http://ttvision.cc/api?code='+code, opts).then(function (response){
+        return(response.json());
+      }).then(function(j) {
+        console.log('res ' + JSON.stringify(j));
+        setChannels(j);
+      });
     }
 
     //http://www.w3schools.com/js/js_cookies.asp
