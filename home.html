@@ -25,6 +25,7 @@
     var channelidx = 0;
 
     window.onload = function() {
+      getFollows();
       options = {
         width: "100%",
         height: "100%",
@@ -33,7 +34,6 @@
       player = new Twitch.Player("main-player", options);
       player.setVolume(0.5);
       player.setMuted(true);
-      getFollows();
     }
 
     function toggleMute() {
