@@ -33,6 +33,7 @@
       player = new Twitch.Player("main-player", options);
       player.setVolume(0.5);
       player.setMuted(true);
+      getFollows();
     }
 
     function toggleMute() {
@@ -64,6 +65,9 @@
     function setChannels(callback) {
       //add channels to local array
       data = JSON.parse(callback);
+      channels = data.channels;
+      channelidx = 0;
+      player.setChannel(channels[channelidx]);
     }
 
     function getFollows() {
