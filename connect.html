@@ -2,31 +2,22 @@
 <html>
 
 <head>
-  <title>ttVision | Authorizing</title>
+  <title>ttVision | Remote</title>
   <link rel="stylesheet" href="//cdn.rawgit.com/necolas/normalize.css/master/normalize.css" >
   <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic" >
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/milligram/1.3.0/milligram.min.css" >
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" >
   <style>
-    #login {
+    #confirm {
       display: block;
+      width: 100%;
+      font-size: 1.5rem;
+      height: 4.5rem;
+      line-height: 4.5rem;
+      padding: 0 2rem;
     }
   </style>
   <script type="text/javascript">
-
-    //https://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
-    function getParameterByName(name) {
-        url = window.location.href;
-        name = name.replace(/[\[\]]/g, "\\$&");
-        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"), results = regex.exec(url);
-        if (!results) return null;
-        if (!results[2]) return '';
-        return decodeURIComponent(results[2].replace(/\+/g, " "));
-    }
-
-    code = getParameterByName('code');
-    localStorage.setItem('code', code);
-
   </script>
 </head>
 
@@ -40,11 +31,20 @@
 
     <div class="row">
       <div class="column">
-        <h2><i class="fa fa-cog fa-spin"></i> Authorizing...</h2>
+        <form method="post" action="/mobile">
+          <fieldset>
+            <label for="username">Twitch Username</label>
+            <input type="text" id="username" placeholder="Your Twitch Username">
+            <label for="room">Room Code</label>
+            <input type="text" id="room" placeholder="4 character room code">
+            <label for="confirm"></label>
+            <input id="confirm" class="button-primary" type="submit" value="Connect">
+          </fieldset>
+        </form>
       </div>
     </div>
 
-    </div>
+  </div>
 </body>
 
 </html>
