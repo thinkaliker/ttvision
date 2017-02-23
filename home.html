@@ -3,36 +3,141 @@
 
 <head>
   <title>ttVision | Home</title>
-  <link rel="stylesheet" href="//cdn.rawgit.com/necolas/normalize.css/master/normalize.css" >
-  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic" >
-  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/milligram/1.3.0/milligram.min.css" >
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" >
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" >
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic" >
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.3.0/milligram.min.css" >
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" >
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vex-js/3.0.0/css/vex.css" >
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vex-js/3.0.0/css/vex-theme-default.min.css" >
+  <link rel="shortcut icon" href="/favicon.ico" >
   <script src="http://player.twitch.tv/js/embed/v1.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/3.6.10/firebase.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vex-js/3.0.0/js/vex.combined.min.js"></script>
+  <script>vex.defaultOptions.className = 'vex-theme-default'</script>
+
   <style>
+    body {
+      overflow: hidden;
+    }
     #main-player {
-      width: 100%;
-      height: 38em;
+      width: 100vw;
+      /*height: 38em;*/
+      height: 80vh;
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+    .fullscreen {
+      width: 100vw !important;
+      height: 100vh !important;
+      padding: 0px !important;
+    }
+    .fullscreen-hidden {
+      display: none;
     }
     .button {
       margin-top: 10px;
       display: block;
     }
+    .vex-dialog-button-primary {
+      background-color: #9b4dca !important;
+    }
   </style>
   <script type="text/javascript">
+    var fbconfig = {
+      apiKey: "AIzaSyArGUPxknMvpRNnnSymPz96XWKOLMGthak",
+      authDomain: "ttvision-23b0e.firebaseapp.com",
+      databaseURL: "https://ttvision-23b0e.firebaseio.com",
+      storageBucket: "ttvision-23b0e.appspot.com",
+      messagingSenderId: "225512011865"
+    };
+    firebase.initializeApp(fbconfig);
+    var db = firebase.database();
+    var username = 'thinkaliker';//REPLACE WITH EMPTY LATER
+
+    /*
+    var header = {
+      method: 'GET',
+      headers: {}
+    }
+    var code = localstorage.getItem('code');
+    fetch('http://ttvision.cc/api?code='+code, header).then(function (response){
+      return(response);
+    }).then(function(j) {
+      //console.log(' ' + JSON.stringify(j));
+      document.querySelector("#username").innerHTML = "Logged in as " + j;
+      localstorage.setItem('username', j);
+    });
+    */
+
+    //move this into fetch
+    var mobile_key;
+    var dataonce = db.ref('/users/' + username).once('value').then(function(snapshot) {
+      document.querySelector("#username").innerHTML = "Logged in as " + username;
+      channels = snapshot.val().channels;
+      mobile_key = snapshot.val().mobile_key;
+    });
+
+  </script>
+</head>
+
+<body>
+  <div id="header" class="container">
+    <div class="row">
+      <div class="column">
+        <h1>ttVision</h1>
+      </div>
+      <div class="column column-25 column-offset-25">
+        <blockquote>
+          <span id="username"></span>
+        </blockquote>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="column">
+      <div id="main-player" class=""></div>
+    </div>
+  </div>
+
+
+  <div id="menubar" class="container">
+    <div class="row">
+      <div class="column column-25">
+        <a class="button" id="prev" href="#" onclick="prevChannel()"><i class="fa fa-fast-backward"></i> Prev Channel</a>
+      </div>
+      <div class="column column-25">
+        <a class="button" id="next" href="#" onclick="nextChannel()"><i class="fa fa-fast-forward"></i> Next Channel</a>
+      </div>
+      <div class="column column-25">
+        <a class="button" id="mute" href="#" onclick="toggleMute()"><i class="fa fa-volume-off fa-lg"></i><i class="fa fa-ban fa-stack-lg"></i> Unmute</a>
+      </div>
+      <div class="column column-25">
+        <a class="button" id="dunno" href="#" onclick="connect()"><i class="fa fa-mobile"></i> connect remote</a>
+      </div>
+
+
+    </div>
+  </div>
+</body>
+
+  <script type="text/javascript">
     var player;
-    var options;
     var channels = ['monstercat', 'food', 'twitchplayspokemon'];
     var channelidx = 0;
+    var connected = 'Not Connected'; //get from server
+    var fullscreen = false;
 
     window.onload = function() {
-      getFollows();
-      options = {
+      getChannels();
+      getConnected();
+      var options = {
         width: "100%",
         height: "100%",
         channel: channels[0]
       };
       player = new Twitch.Player("main-player", options);
-      player.setVolume(0.5);
+      player.setVolume(0.75);
       player.setMuted(true);
     }
 
@@ -71,57 +176,62 @@
       player.setChannel(channels[channelidx]);
     }
 
-    function getFollows() {
-      var code = localStorage.getItem("code");
-      //console.log('code ' + code);
-      var opts = {
-        method: 'GET',
-        headers: {}
-      }
-      fetch('http://ttvision.cc/api?code='+code, opts).then(function (response){
-        return(response.json());
-      }).then(function(j) {
-        console.log('res ' + JSON.stringify(j));
-        setChannels(j);
+    function getChannels() {
+      var channelref = db.ref('/users/' + username + '/channels');
+      channelref.on('value', function(snapshot) {
+        channels = snapshot.val();
+        console.log("channels updated " + channels);
+      });
+
+    }
+
+    function getConnected() {
+      var connref = db.ref('/users/' + username + '/mobile_connected');
+      connref.on('value', function(snapshot) {
+        if (snapshot.val()) {
+          connected = 'Connected';
+          vex.closeAll();
+          console.log("remote connected");
+        } else {
+          connected = 'Not Connected';
+        }
       });
     }
 
+    function connect() {
+      var keyref = db.ref('/users/' + username + '/mobile_key');
+      keyref.once('value').then(function(snapshot) {
+        mobile_key = String(snapshot.val());
+        console.log('mobile_key: ' + mobile_key);
+      });
 
+      vex.dialog.alert({ unsafeMessage:
+                        '<h1>Connect a remote</h1>'+
+                        '<h2>Mobile key: ' + mobile_key + '</h2>' +
+                        '<ol><li>Open http://ttvision.cc/connect on your mobile device.</li><li>Enter your Twitch username and mobile key.</li><li>Press Connect.</li></ol>'+
+                        '<h2 id="connected">Remote: ' + connected + '</h2>'
+                       });
+      //verify key with remote
+    }
 
-}
+    function setCurrentlyWatching() {
+      var watchref = db.ref('/users/' + username + '/currently_watching');
+
+    }
+
+    function toggleFullscreen() {
+      if(!fullscreen) {
+        document.querySelector("#header").classList.add("fullscreen-hidden");
+        document.querySelector("#menubar").classList.add("fullscreen-hidden");
+        document.querySelector("#main-player").classList.add("fullscreen");
+        fullscreen = true;
+      } else {
+        document.querySelector("#header").classList.remove("fullscreen-hidden");
+        document.querySelector("#menubar").classList.remove("fullscreen-hidden");
+        document.querySelector("#main-player").classList.remove("fullscreen");
+        fullscreen = false;
+      }
+    }
   </script>
-</head>
-
-<body>
-  <div class="container">
-    <div class="row">
-      <div class="column">
-        <h1>ttVision</h1>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="column">
-        <div id="main-player"></div>
-      </div>
-    </div>
-
-    <div class="row" id="menubar">
-      <div class="column column-25">
-        <a class="button" id="prev" href="#" onclick="prevChannel()"><i class="fa fa-fast-backward"></i> Prev Channel</a>
-      </div>
-      <div class="column column-25">
-        <a class="button" id="mute" href="#" onclick="toggleMute()"><i class="fa fa-volume-off fa-lg"></i><i class="fa fa-ban fa-stack-lg"></i> Unmute</a>
-      </div>
-      <div class="column column-25">
-        <a class="button" id="dunno" href="#" onclick="getFollows()"><i class="fa fa-refresh"></i> refresh</a>
-      </div>
-      <div class="column column-25">
-        <a class="button" id="next" href="#" onclick="nextChannel()"><i class="fa fa-fast-forward"></i> Next Channel</a>
-      </div>
-
-    </div>
-  </div>
-</body>
 
 </html>
