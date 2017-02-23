@@ -17,3 +17,4 @@ UCR CS 179I Senior Design Project
 - [Milligram](https://milligram.github.io/)
 - [Font Awesome](http://fontawesome.io)
 - [Firebase](https://firebase.google.com/)
+- [vex](https://github.com/hubspot/vex)
