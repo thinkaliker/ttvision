@@ -31,8 +31,8 @@
     firebase.initializeApp(fbconfig);
     var db = firebase.database();
 
-
     var muted = true;
+    var fullscreen = false;
     function toggleMute() {
       //need to get mute status
       if (muted) {
@@ -42,8 +42,22 @@
         document.querySelector("#mute").innerHTML = '<i class="fa fa-volume-off fa-lg"></i><i class="fa fa-ban fa-stack-lg"></i> Unmute';
         muted = true;
       }
+    }
 
+    function toggleFullscreen() {
+      if (!fullscreen) {
+        //send fullscreen command
+      } else {
+        //send fullscreen command
+      }
+    }
 
+    function nextChannel() {
+      //send next channel command
+    }
+
+    function prevChannel() {
+      //send prev channel command
     }
   </script>
 </head>
@@ -58,8 +72,8 @@
 
     <div class="row">
       <div class="column">
-        <a href="" class="button remote-btn" id="up"><i class="fa fa-arrow-up"></i> Previous Channel</a>
-        <a href="" class="button remote-btn" id="down"><i class="fa fa-arrow-down"></i> Next Channel</a>
+        <a href="" class="button remote-btn" id="up" onclick="prevChannel()"><i class="fa fa-arrow-up"></i> Previous Channel</a>
+        <a href="" class="button remote-btn" id="down" onclick=""><i class="fa fa-arrow-down"></i> Next Channel</a>
 
         <br />
 
