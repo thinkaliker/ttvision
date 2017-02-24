@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic" >
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.3.0/milligram.min.css" >
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" >
-  <link rel="shortcut icon" href="/favicon.ico" >
+  <link rel="shortcut icon" href="/favicon.ico " >
   <style>
     #confirm {
       display: block;
@@ -20,6 +20,11 @@
     }
   </style>
   <script type="text/javascript">
+    function setUsername() {
+      var username = document.getElementById("username").value;
+      localStorage.setItem('username', username);
+      console.log('username ' + username);
+    }
   </script>
 </head>
 
@@ -33,14 +38,14 @@
 
     <div class="row">
       <div class="column">
-        <form method="post" action="/mobile">
+        <form method="post" action="/mobile" onsubmit="setUsername()">
           <fieldset>
             <label for="username">Twitch Username</label>
             <input type="text" id="username" placeholder="Your Twitch Username">
             <label for="room">Room Code</label>
             <input type="text" id="room" placeholder="4 character mobile key">
             <label for="confirm"></label>
-            <input id="confirm" class="button-primary" type="submit" value="Connect">
+            <input id="confirm" class="button-primary" type="submit" value="Connect" \>
           </fieldset>
         </form>
       </div>
