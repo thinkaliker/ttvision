@@ -60,7 +60,7 @@
       method: 'GET',
       headers: {}
     }
-    var code = localstorage.getItem('code');
+    var code = localStorage.getItem('code');
     fetch('http://ttvision.cc/api/get_user?code='+code, header).then(function (response){
       return(response);
     }).then(function(j) {
