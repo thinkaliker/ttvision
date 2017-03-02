@@ -30,9 +30,9 @@
     };
     firebase.initializeApp(fbconfig);
     var db = firebase.database();
+    var username = localStorage.getItem('username');
 
     var muted = true;
-    var fullscreen = false;
     function toggleMute() {
       //need to get mute status
       if (muted) {
@@ -45,19 +45,28 @@
     }
 
     function toggleFullscreen() {
-      if (!fullscreen) {
-        //send fullscreen command
-      } else {
-        //send fullscreen command
-      }
+      //send fullscreen command
+      db.ref('/users/' + username + '/command').set("fullscreen");
     }
 
     function nextChannel() {
       //send next channel command
+      db.ref('/users/' + username + '/command').set("next_channel");
     }
 
     function prevChannel() {
       //send prev channel command
+      db.ref('/users/' + username + '/command').set("prev_channel");
+    }
+
+    function toggleMute() {
+      //send mute command
+      db.ref('/users/' + username + '/command').set("mute");
+    }
+
+    function disconnect() {
+      //disconnect from server
+      //db.ref('/users/' +  username + '/command').set("disconnect");
     }
   </script>
 </head>
@@ -73,15 +82,19 @@
     <div class="row">
       <div class="column">
         <a href="" class="button remote-btn" id="up" onclick="prevChannel()"><i class="fa fa-arrow-up"></i> Previous Channel</a>
-        <a href="" class="button remote-btn" id="down" onclick=""><i class="fa fa-arrow-down"></i> Next Channel</a>
+        <a href="" class="button remote-btn" id="down" onclick="nextChannel()"><i class="fa fa-arrow-down"></i> Next Channel</a>
 
         <br />
 
-        <a href="" class="button remote-btn" id="fullscreen"><i class="fa fa-arrows-alt"></i> Fullscreen</a>
+        <a href="" class="button remote-btn" id="fullscreen" onclick="toggleFullscreen()"><i class="fa fa-arrows-alt"></i> Fullscreen</a>
 
         <br />
 
         <a href="" class="button remote-btn" id="mute" onclick="toggleMute()"><i class="fa fa-volume-off fa-lg"></i><i class="fa fa-ban fa-stack-lg"></i> Unmute</a>
+
+        <br />
+
+        <a href="" class="button remote-btn" id="disconnect" onclick="disconnect()"><i class="fa fa-sign-out"></i> Disconnect</a>
       </div>
     </div>
 

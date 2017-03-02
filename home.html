@@ -67,7 +67,7 @@
       //console.log(' ' + JSON.stringify(j));
       document.querySelector("#username").innerHTML = "Logged in as " + j;
       //localstorage.setItem('username', j);
-      username = toString(j);
+      username = String(j);
 
       dataonce = db.ref('/users/' + username).once('value').then(function(snapshot) {
         document.querySelector("#username").innerHTML = "Logged in as " + username;
@@ -145,6 +145,7 @@
       player.setVolume(0.75);
       player.setMuted(true);
       setCurrentlyWatching();
+      remote();
     }
 
     function toggleMute() {
@@ -238,6 +239,28 @@
         document.querySelector("#main-player").classList.remove("fullscreen");
         fullscreen = false;
       }
+    }
+
+    function remote() {
+      var remoteref = db.ref('/users/' + username + '/command');
+      remoteref.on('value').then(function(snapshot) {
+        var sw = String(snapshot);
+        switch (sw) {
+          case "fullscreen":
+            toggleFullscreen();
+            break;
+          case "prev_channel":
+            prevChannel();
+            break;
+          case "next_channel":
+            nextChannel();
+            break;
+          case "mute":
+            toggleMute();
+            break;
+        }
+        remoteref.set("")
+      });
     }
   </script>
 
