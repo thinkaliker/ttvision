@@ -73,6 +73,7 @@
         document.querySelector("#username").innerHTML = "Logged in as " + username;
         channels = snapshot.val().channels;
         mobile_key = snapshot.val().mobile_key;
+        onpageload();
       });
     });
 
@@ -132,7 +133,7 @@
     var connected = 'Not Connected'; //get from server
     var fullscreen = false;
 
-    window.onload = function() {
+    function onpageload() {
       getChannels();
       getConnected();
       var options = {
