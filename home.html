@@ -64,7 +64,7 @@
     };
     firebase.initializeApp(fbconfig);
     var db = firebase.database();
-    var username = '';//REPLACE WITH EMPTY LATER
+    var username = '';
     var mobile_key;
     var dataonce;
 
@@ -76,11 +76,12 @@
     fetch('http://ttvision.cc/api/get_user?code='+code, header).then(function (response){
       return response.blob();
     }).then(function(j) {
-      //console.log(' ' + JSON.stringify(j));
-      console.log('response: ' + j + ' ' + String(j));
+      var res = JSON.parse(j);
+      var user = res['user'];
+      console.log('response: ' + res + ' ' + String(res) + " " + user);
       document.querySelector("#username").innerHTML = "Logged in as " + j;
-      //localstorage.setItem('username', j);
-      username = String(j);
+      localstorage.setItem('username', user);
+      username = String(user);
 
       dataonce = db.ref('/users/' + username).once('value').then(function(snapshot) {
         document.querySelector("#username").innerHTML = "Logged in as " + username;
