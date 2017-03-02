@@ -79,7 +79,7 @@
       }).then(function(j) {
         var user = j['user'];
         document.querySelector("#username").innerHTML = "Logged in as " + j;
-        localstorage.setItem('username', user);
+        localStorage.setItem('username', user);
         username = String(user);
 
         dataonce = db.ref('/users/' + username).once('value').then(function(snapshot) {
