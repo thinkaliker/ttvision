@@ -51,14 +51,13 @@
       for (var i=0;i<vars.length;i++) {
         var pair = vars[i].split("=");
         if(pair[0] == variable) {
-          return pair[1];
+          //return pair[1];
+          code = getQueryVariable("code");
         }
       }
       history.replaceState('Home', 'ttVision | Home', 'http://ttvision.cc/home');
-      return(false);
+      //return(false);
     }
-
-    code = getQueryVariable("code");
     //localStorage.setItem('code', code);
 
     var fbconfig = {
