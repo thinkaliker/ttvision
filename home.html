@@ -73,24 +73,25 @@
       headers: {}
     }
     //var code = localStorage.getItem('code');
-    fetch('http://ttvision.cc/api/get_user?code='+code, header).then(function (response){
-      return response.json();
-    }).then(function(j) {
-      var res = JSON.parse(j);
-      var user = res['user'];
-      console.log('response: ' + res + ' ' + String(res) + " " + user);
-      document.querySelector("#username").innerHTML = "Logged in as " + j;
-      localstorage.setItem('username', user);
-      username = String(user);
+    setTimeout(function() {
+      fetch('http://ttvision.cc/api/get_user?code='+code, header).then(function (response){
+        return response.json();
+      }).then(function(j) {
+        var res = JSON.parse(j);
+        var user = res['user'];
+        console.log('response: ' + res + ' ' + String(res) + " " + user);
+        document.querySelector("#username").innerHTML = "Logged in as " + j;
+        localstorage.setItem('username', user);
+        username = String(user);
 
-      dataonce = db.ref('/users/' + username).once('value').then(function(snapshot) {
-        document.querySelector("#username").innerHTML = "Logged in as " + username;
-        channels = snapshot.val().channels;
-        mobile_key = snapshot.val().mobile_key;
-        onpageload();
+        dataonce = db.ref('/users/' + username).once('value').then(function(snapshot) {
+          document.querySelector("#username").innerHTML = "Logged in as " + username;
+          channels = snapshot.val().channels;
+          mobile_key = snapshot.val().mobile_key;
+          onpageload();
+        });
       });
-    });
-
+    }, 100);
   </script>
 </head>
 
