@@ -52,30 +52,34 @@
     };
     firebase.initializeApp(fbconfig);
     var db = firebase.database();
-    var username = 'thinkaliker';//REPLACE WITH EMPTY LATER
+    var username = '';//REPLACE WITH EMPTY LATER
+    var mobile_key;
+    var dataonce;
 
-    /*
     var header = {
       method: 'GET',
       headers: {}
     }
     var code = localstorage.getItem('code');
-    fetch('http://ttvision.cc/api?code='+code, header).then(function (response){
+    fetch('http://ttvision.cc/api/get_user?code='+code, header).then(function (response){
       return(response);
     }).then(function(j) {
       //console.log(' ' + JSON.stringify(j));
       document.querySelector("#username").innerHTML = "Logged in as " + j;
-      localstorage.setItem('username', j);
+      //localstorage.setItem('username', j);
+      username = toString(j);
+
+      dataonce = db.ref('/users/' + username).once('value').then(function(snapshot) {
+        document.querySelector("#username").innerHTML = "Logged in as " + username;
+        channels = snapshot.val().channels;
+        mobile_key = snapshot.val().mobile_key;
+      });
     });
-    */
+
 
     //move this into fetch
-    var mobile_key;
-    var dataonce = db.ref('/users/' + username).once('value').then(function(snapshot) {
-      document.querySelector("#username").innerHTML = "Logged in as " + username;
-      channels = snapshot.val().channels;
-      mobile_key = snapshot.val().mobile_key;
-    });
+
+
 
   </script>
 </head>
@@ -139,6 +143,7 @@
       player = new Twitch.Player("main-player", options);
       player.setVolume(0.75);
       player.setMuted(true);
+      setCurrentlyWatching();
     }
 
     function toggleMute() {
@@ -157,6 +162,7 @@
         channelidx = 0;
       }
       player.setChannel(channels[channelidx]);
+      setCurrentlyWatching();
     }
 
     function prevChannel() {
@@ -165,6 +171,7 @@
         channelidx = channels.length - 1;
       }
       player.setChannel(channels[channelidx]);
+      setCurrentlyWatching();
     }
 
     function setChannels(body) {
@@ -216,7 +223,6 @@
 
     function setCurrentlyWatching() {
       var watchref = db.ref('/users/' + username + '/currently_watching');
-
     }
 
     function toggleFullscreen() {
