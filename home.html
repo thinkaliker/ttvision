@@ -43,6 +43,24 @@
     }
   </style>
   <script type="text/javascript">
+    //https://css-tricks.com/snippets/javascript/get-url-variables/
+    function getQueryVariable(variable)
+    {
+      var query = window.location.search.substring(1);
+      var vars = query.split("&");
+      for (var i=0;i<vars.length;i++) {
+        var pair = vars[i].split("=");
+        if(pair[0] == variable) {
+          return pair[1];
+        }
+      }
+      history.replaceState('Home', 'ttVision | Home', 'http://ttvision.cc/home');
+      return(false);
+    }
+
+    code = getQueryVariable("code");
+    //localStorage.setItem('code', code);
+
     var fbconfig = {
       apiKey: "AIzaSyArGUPxknMvpRNnnSymPz96XWKOLMGthak",
       authDomain: "ttvision-23b0e.firebaseapp.com",
@@ -60,7 +78,7 @@
       method: 'GET',
       headers: {}
     }
-    var code = localStorage.getItem('code');
+    //var code = localStorage.getItem('code');
     fetch('http://ttvision.cc/api/get_user?code='+code, header).then(function (response){
       return(response);
     }).then(function(j) {
@@ -76,11 +94,6 @@
         onpageload();
       });
     });
-
-
-    //move this into fetch
-
-
 
   </script>
 </head>
