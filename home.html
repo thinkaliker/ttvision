@@ -74,10 +74,10 @@
     }
     //var code = localStorage.getItem('code');
     fetch('http://ttvision.cc/api/get_user?code='+code, header).then(function (response){
-      return(response);
+      return response.blob();
     }).then(function(j) {
       //console.log(' ' + JSON.stringify(j));
-      console.log('response: ' + j);
+      console.log('response: ' + j + ' ' + String(j));
       document.querySelector("#username").innerHTML = "Logged in as " + j;
       //localstorage.setItem('username', j);
       username = String(j);
