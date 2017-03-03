@@ -150,6 +150,7 @@
     }
 
     function updateVol() {
+      vol = document.getElementById("vol").value;
       var tvol = vol / 100.0;
       db.ref('/users/' + username + '/volume').set(tvol);
     }
@@ -183,7 +184,7 @@
 
         <a href="#" class="button remote-btn" id="mute" onclick="toggleMute()"><i class="fa fa-volume-off fa-lg"></i><i class="fa fa-ban fa-stack-lg"></i> Unmute</a>
 
-        <input type="range" id="vol" min="0" max="100" onchange="updateVol()">
+        <input type="range" id="vol" min="0" max="100" oninput="updateVol()">
         <div>Volume</div>
         <br />
         <br />
