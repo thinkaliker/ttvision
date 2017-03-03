@@ -56,9 +56,9 @@
         <form method="post" enctype="application/x-www-form-urlencoded" action="/remote" onsubmit="setUsername()">
           <fieldset>
             <label for="username">Twitch Username</label>
-            <input type="text" id="username" placeholder="Your Twitch Username">
+            <input type="text" id="username" name="username" placeholder="Your Twitch Username">
             <label for="mobile_key">Room Code</label>
-            <input type="text" id="mobile_key" placeholder="4 character mobile key">
+            <input type="text" id="mobile_key" name="mobile_key" placeholder="4 character mobile key">
             <label for="confirm" id="confirm_label"></label>
             <input id="confirm" class="button-primary" type="submit" value="Connect" \>
           </fieldset>
