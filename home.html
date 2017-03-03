@@ -238,7 +238,7 @@
     }
 
     function setCurrentlyWatching() {
-      db.ref('/users/' + username + '/currently_watching').set(channel[channelidx]);
+      db.ref('/users/' + username + '/currently_watching').set(channels[channelidx]);
     }
 
     function toggleFullscreen() {
