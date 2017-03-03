@@ -41,6 +41,9 @@
     .vex-dialog-button-primary {
       background-color: #9b4dca !important;
     }
+    .hide {
+      display: none;
+    }
   </style>
   <script type="text/javascript">
     var code;
@@ -84,6 +87,7 @@
         document.getElementById("loading").remove();
 
         dataonce = db.ref('/users/' + username).once('value').then(function(snapshot) {
+          document.getElementById("blockuser").classList.remove("hide");
           document.querySelector("#username").innerHTML = "Logged in as " + username;
           channels = snapshot.val().channels;
           mobile_key = snapshot.val().mobile_key;
@@ -101,7 +105,7 @@
         <h1>ttVision</h1>
       </div>
       <div class="column column-25 column-offset-25">
-        <blockquote>
+        <blockquote id="blockuser" class="hide">
           <span id="username"></span>
         </blockquote>
       </div>
@@ -110,7 +114,8 @@
 
   <div class="row">
     <div class="column">
-      <div id="main-player" class=""><div id="loading"><i class="fa fa-gear fa-spin"></i> Loading...</div></div>
+      <div id="main-player" class=""><div id="loading"><div class="container"><h2><i class="fa fa-gear fa-spin"></i> Loading...</h2></div></div>
+        </div>
     </div>
   </div>
 
