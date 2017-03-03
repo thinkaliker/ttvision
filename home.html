@@ -257,7 +257,7 @@
 
     function remote() {
       var remoteref = db.ref('/users/' + username + '/command');
-      remoteref.on('value').then(function(snapshot) {
+      remoteref.on('value', function(snapshot) {
         console.log("command " + snapshot);
         var sw = snapshot;
         switch (sw) {
