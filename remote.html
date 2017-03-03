@@ -67,6 +67,7 @@
     function disconnect() {
       //disconnect from server
       //db.ref('/users/' +  username + '/command').set("disconnect");
+      db.ref('/users/' +  username + '/mobile_connected').set(false);
     }
   </script>
 </head>
@@ -81,8 +82,8 @@
 
     <div class="row">
       <div class="column">
-        <a href="#" class="button remote-btn" id="up" onclick="prevChannel()"><i class="fa fa-arrow-up"></i> Previous Channel</a>
-        <a href="#" class="button remote-btn" id="down" onclick="nextChannel()"><i class="fa fa-arrow-down"></i> Next Channel</a>
+        <a href="#" class="button remote-btn" id="up" onclick="nextChannel()"><i class="fa fa-arrow-up"></i> Next Channel</a>
+        <a href="#" class="button remote-btn" id="down" onclick="prevChannel()"><i class="fa fa-arrow-down"></i> Previous Channel</a>
 
         <br />
 
@@ -94,7 +95,7 @@
 
         <br />
 
-        <a href="#" class="button remote-btn" id="disconnect" onclick="disconnect()"><i class="fa fa-sign-out"></i> Disconnect</a>
+        <a href="/connect" class="button remote-btn" id="disconnect" onclick="disconnect()"><i class="fa fa-sign-out"></i> Disconnect</a>
       </div>
     </div>
 
