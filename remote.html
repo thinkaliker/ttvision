@@ -66,8 +66,8 @@
 
     function disconnect() {
       //disconnect from server
-      //db.ref('/users/' +  username + '/command').set("disconnect");
-      db.ref('/users/' +  username + '/mobile_connected').set(false);
+      db.ref('/users/' + username + '/command').set("disconnect");
+      db.ref('/users/' + username + '/mobile_connected').set(false);
     }
   </script>
 </head>
