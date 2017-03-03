@@ -47,6 +47,9 @@
   </style>
   <script type="text/javascript">
     var code;
+    if (localStorage.getItem('code') != null) {
+      code = localStorage.getItem('code');
+    }
     //https://css-tricks.com/snippets/javascript/get-url-variables/
     var query = window.location.search.substring(1);
     var vars = query.split("&");
@@ -56,11 +59,7 @@
         code = pair[1];
       }
     }
-    if (localStorage.getItem('code') != null) {
-      code = localStorage.getItem('code');
-    }
 
-    history.replaceState('Home', 'ttVision | Home', 'http://ttvision.cc/home');
 
     var fbconfig = {
       apiKey: "AIzaSyArGUPxknMvpRNnnSymPz96XWKOLMGthak",
@@ -83,6 +82,7 @@
       fetch('http://ttvision.cc/api/get_user?code='+code, header).then(function (response){
         return response.json();
       }).then(function(j) {
+        history.replaceState('Home', 'ttVision | Home', 'http://ttvision.cc/home');
         var user = j['user'];
         document.querySelector("#username").innerHTML = "Logged in as " + j;
         localStorage.setItem('username', user);
