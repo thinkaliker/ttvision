@@ -81,6 +81,7 @@
         document.querySelector("#username").innerHTML = "Logged in as " + j;
         localStorage.setItem('username', user);
         username = String(user);
+        document.getElementById("loading").remove();
 
         dataonce = db.ref('/users/' + username).once('value').then(function(snapshot) {
           document.querySelector("#username").innerHTML = "Logged in as " + username;
@@ -109,7 +110,7 @@
 
   <div class="row">
     <div class="column">
-      <div id="main-player" class=""></div>
+      <div id="main-player" class=""><div id="loading"><i class="fa fa-gear fa-spin"></i> Loading...</div></div>
     </div>
   </div>
 
