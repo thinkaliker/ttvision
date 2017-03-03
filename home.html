@@ -57,6 +57,7 @@
       var pair = vars[i].split("=");
       if(pair[0] == "code") {
         code = pair[1];
+        localStorage.setItem('code', code);
       }
     }
 
