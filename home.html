@@ -95,11 +95,9 @@
           channels = snapshot.val().channels;
           mobile_key = snapshot.val().mobile_key;
           onpageload();
-          heartbeat();
         });
       });
     }, 100);
-
   </script>
 </head>
 
@@ -298,12 +296,6 @@
       })
     }
 
-    function heartbeat() {
-      setInterval(function() {
-        //heartbeat
-        db.ref('/users/' + username + '/heartbeat').set(true);
-      }, 30000);
-    }
   </script>
 
 </html>
