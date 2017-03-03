@@ -137,10 +137,11 @@
         <a class="button" id="mute" href="#" onclick="toggleMute()"><i class="fa fa-volume-off fa-lg"></i><i class="fa fa-ban fa-stack-lg"></i> Unmute</a>
       </div>
       <div class="column column-25">
-        <a class="button" id="dunno" href="#" onclick="connect()"><i class="fa fa-mobile"></i> connect remote</a>
+        <a class="button" id="connect" href="#" onclick="connect()"><i class="fa fa-mobile"></i> connect remote</a>
       </div>
-
-
+    </div>
+    <div class="row">
+      <a href="#" id="help" onclick="help()">Help</a>
     </div>
   </div>
 </body>
@@ -238,7 +239,7 @@
 
       vex.dialog.alert({ unsafeMessage:
                         '<h1>Connect a remote</h1>'+
-                        '<h2>Mobile key: ' + mobile_key + '</h2>' +
+                        '<h2>Mobile key: <code>' + mobile_key + '</code></h2>' +
                         '<ol><li>Open http://ttvision.cc/connect on your mobile device.</li><li>Enter your Twitch username and mobile key.</li><li>Press Connect.</li></ol>'+
                         '<h2 id="connected">Remote: ' + connected + '</h2>'
                        });
@@ -297,6 +298,63 @@
         player.setVolume(snapshot.val());
       })
     }
+
+    function setdbvol(delta) {
+      volume += delta;
+      db.ref('/users/' + username + '/volume').set(volume);
+    }
+
+    function key_pressed(e) {
+      switch (e.keyCode) {
+        case 70:
+          //f, fullscreen
+          toggleFullscreen();
+          break;
+        case 37:
+          //left, prev
+          prevChannel();
+          break;
+        case 39:
+          //right, next
+          nextChannel();
+          break;
+        case 77:
+          //m, mute
+          toggleMute();
+          break;
+        case 67:
+          //c, connect
+          connect();
+          break;
+        case 38:
+          //up, vol up
+          setdbvol(0.1);
+          break;
+        case 40:
+          //down, vol down
+          setdbvol(-0.1);
+          break;
+      }
+    }
+    document.addEventListener('keyup', key_pressed, false);
+
+
+    function help() {
+      vex.dialog.alert({ unsafeMessage:
+                        '<h1>Help</h1>'+
+                        'Use the left and right arrows to navigate through all your channels.<br />' +
+                        'Connect a phone by clicking the connect button and following the instructions.<br />'+
+                        '<h2>Keyboard Shortcuts</h2>' +
+                        '<code>&rarr;</code> - Next Channel<br />'+
+                        '<code>&larr;</code> - Previous Channel<br />'+
+                        '<code>&uarr;</code> - Volume Up<br />'+
+                        '<code>&darr;</code> - Volume Down<br />'+
+                        '<code>m</code> - Mute<br />'+
+                        '<code>c</code> - Connect<br />'+
+                        '<code>f</code> - Fullscreen<br />'
+                 });
+    }
+
 
   </script>
 
