@@ -56,6 +56,10 @@
         code = pair[1];
       }
     }
+    if (localStorage.getItem('code') != null) {
+      code = localStorage.getItem('code');
+    }
+
     history.replaceState('Home', 'ttVision | Home', 'http://ttvision.cc/home');
 
     var fbconfig = {
@@ -69,7 +73,6 @@
     var db = firebase.database();
     var username = '';
     var mobile_key;
-    var dataonce;
 
     var header = {
       method: 'GET',
@@ -86,15 +89,17 @@
         username = String(user);
         document.getElementById("loading").remove();
 
-        dataonce = db.ref('/users/' + username).once('value').then(function(snapshot) {
+        db.ref('/users/' + username).once('value').then(function(snapshot) {
           document.getElementById("blockuser").classList.remove("hide");
           document.querySelector("#username").innerHTML = "Logged in as " + username;
           channels = snapshot.val().channels;
           mobile_key = snapshot.val().mobile_key;
           onpageload();
+          heartbeat();
         });
       });
     }, 100);
+
   </script>
 </head>
 
@@ -142,7 +147,7 @@
 
   <script type="text/javascript">
     var player;
-    var channels = ['monstercat', 'food', 'twitchplayspokemon'];
+    var channels = [];
     var channelidx = 0;
     var connected = 'Not Connected'; //get from server
     var fullscreen = false;
@@ -282,6 +287,13 @@
         }
         remoteref.remove();
       });
+    }
+
+    function heartbeat() {
+      setInterval(function() {
+        //heartbeat
+        db.ref('/users/' + username + '/heartbeat').set(true);
+      }, 30000);
     }
   </script>
 
