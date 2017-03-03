@@ -151,6 +151,7 @@
     var channelidx = 0;
     var connected = 'Not Connected'; //get from server
     var fullscreen = false;
+    var volume;
 
     function onpageload() {
       getChannels();
@@ -161,10 +162,12 @@
         channel: channels[0]
       };
       player = new Twitch.Player("main-player", options);
-      player.setVolume(0.75);
+      volume = 1.0;
+      player.setVolume(volume);
       player.setMuted(true);
       setCurrentlyWatching();
       remote();
+      setvolume();
     }
 
     function toggleMute() {
@@ -287,6 +290,12 @@
         }
         remoteref.remove();
       });
+    }
+
+    function setvolume() {
+      db.ref('/users/' + username + '/volume').on('value', function(snapshot) {
+        player.setVolume(snapshot.val());
+      })
     }
 
     function heartbeat() {

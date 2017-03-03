@@ -19,6 +19,9 @@
       line-height: 4.5rem;
       height: 4.5rem;
     }
+    #vol {
+      width: 100%;
+    }
   </style>
   <script type="text/javascript">
     var fbconfig = {
@@ -32,17 +35,16 @@
     var db = firebase.database();
     var username = localStorage.getItem('username');
 
-    var muted = true;
-    function toggleMute() {
-      //need to get mute status
-      if (muted) {
-        document.querySelector("#mute").innerHTML = '<i id="mute" class="fa fa-volume-up"></i> Mute';
-        muted = false;
-      } else {
-        document.querySelector("#mute").innerHTML = '<i class="fa fa-volume-off fa-lg"></i><i class="fa fa-ban fa-stack-lg"></i> Unmute';
-        muted = true;
-      }
-    }
+    var muted;
+    var vol;
+
+    db.ref('/users/' + username + '/muted').once('value').then(function(snapshot) {
+      muted = snapshot.val();
+    });
+
+    db.ref('/users/' + username + '/volume').once('value').then(function(snapshot) {
+      vol = snapshot.val();
+    });
 
     function toggleFullscreen() {
       //send fullscreen command
@@ -62,6 +64,17 @@
     function toggleMute() {
       //send mute command
       db.ref('/users/' + username + '/command').set("mute");
+      if (muted) {
+        document.querySelector("#mute").innerHTML = '<i id="mute" class="fa fa-volume-up"></i> Mute';
+        muted = false;
+      } else {
+        document.querySelector("#mute").innerHTML = '<i class="fa fa-volume-off fa-lg"></i><i class="fa fa-ban fa-stack-lg"></i> Unmute';
+        muted = true;
+      }
+    }
+
+    function updateVol() {
+      db.ref('/users/' + username + '/volume').set(vol / 100);
     }
 
     function disconnect() {
@@ -92,6 +105,10 @@
         <br />
 
         <a href="#" class="button remote-btn" id="mute" onclick="toggleMute()"><i class="fa fa-volume-off fa-lg"></i><i class="fa fa-ban fa-stack-lg"></i> Unmute</a>
+
+        <br />
+
+        <input type="range" id="vol" min="0" max="100" value="100" onchange="updateVol()">
 
         <br />
 
