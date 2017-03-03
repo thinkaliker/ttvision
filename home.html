@@ -258,8 +258,9 @@
     function remote() {
       var remoteref = db.ref('/users/' + username + '/command');
       remoteref.on('value', function(snapshot) {
-        console.log("command " + String(snapshot));
-        var sw = String(snapshot);
+        var sw = String(snapshot.val());
+        console.log("command " + sw);
+
         switch (sw) {
           case 'fullscreen':
             console.log("remote fullscreen");
@@ -278,7 +279,7 @@
             toggleMute();
             break;
         }
-        remoteref.set("");
+        remoteref.remove();
       });
     }
   </script>
