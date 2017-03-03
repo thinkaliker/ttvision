@@ -81,6 +81,7 @@
     //var code = localStorage.getItem('code');
     setTimeout(function() {
       fetch('http://ttvision.cc/api/get_user?code='+code, header).then(function (response){
+        console.log("code: " + code);
         return response.json();
       }).then(function(j) {
         history.replaceState('Home', 'ttVision | Home', 'http://ttvision.cc/home');
