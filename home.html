@@ -258,18 +258,23 @@
     function remote() {
       var remoteref = db.ref('/users/' + username + '/command');
       remoteref.on('value').then(function(snapshot) {
-        var sw = String(snapshot);
+        console.log("command " + snapshot);
+        var sw = snapshot;
         switch (sw) {
-          case "fullscreen":
+          case 'fullscreen':
+            console.log("remote fullscreen");
             toggleFullscreen();
             break;
-          case "prev_channel":
+          case 'prev_channel':
+            console.log("remote prev");
             prevChannel();
             break;
-          case "next_channel":
+          case 'next_channel':
+            console.log("remote next");
             nextChannel();
             break;
-          case "mute":
+          case 'mute':
+            console.log("remote mute");
             toggleMute();
             break;
         }
