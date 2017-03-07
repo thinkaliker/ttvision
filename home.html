@@ -197,7 +197,7 @@
 
     function prevChannel() {
       channelidx -= 1;
-      if (channelidx <= 0) {
+      if (channelidx < 0) {
         channelidx = channels.length - 1;
       }
       player.setChannel(channels[channelidx]);
