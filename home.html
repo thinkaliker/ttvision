@@ -25,7 +25,6 @@
       height: 80vh;
       padding-left: 20px;
       padding-right: 20px;
-      pointer-events: none;
     }
     .fullscreen {
       width: 100vw !important;
@@ -44,6 +43,9 @@
     }
     .hide {
       display: none;
+    }
+    .disable {
+      pointer-events: none;
     }
   </style>
   <script type="text/javascript">
@@ -127,7 +129,7 @@
 
   <div class="row">
     <div class="column">
-      <div id="main-player" class=""><div id="loading"><div class="container"><h2><i class="fa fa-gear fa-spin"></i> Loading...</h2></div></div>
+      <div id="main-player" class="disable"><div id="loading"><div class="container"><h2><i class="fa fa-gear fa-spin"></i> Loading...</h2></div></div>
         </div>
     </div>
   </div>
@@ -171,9 +173,19 @@
       volume = 1.0;
       player.setVolume(volume);
       player.setMuted(true);
+      playerEvents();
       setCurrentlyWatching();
       remote();
       setvolume();
+    }
+
+    function playerEvents() {
+      player.addEventListener(Twitch.Player.PAUSE, function() {
+        document.getElementById("main-player").classList.remove("disable");
+      });
+      player.addEventListener(Twitch.Player.PLAY, function() {
+        document.getElementById("main-player").classList.add("disable");
+      });
     }
 
     function toggleMute() {
@@ -252,6 +264,7 @@
 
     function setCurrentlyWatching() {
       db.ref('/users/' + username + '/current_channel').set(channels[channelidx]);
+
     }
 
     function toggleFullscreen() {
