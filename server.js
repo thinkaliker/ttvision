@@ -218,7 +218,7 @@ writeUserDataUpdate = function(following_user_leaf)
 		volume: 1,
 	});*/
 	
-	var newUserKey = firebase.database().ref('users/' + following_user_leaf.name).child('channels').setValue(following_user_leaf_channels);
+	var newUserKey = firebase.database().ref('users/' + following_user_leaf.name).child('channels').setValue(following_user_leaf.channels);
 	
 	sync_database(user_list);
 	//setTimeout(1000, function() {
