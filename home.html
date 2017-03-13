@@ -183,6 +183,7 @@
     var browsechannels = [];
     var popup_mutex = false;
 
+    document.addEventListener('keyup', key_pressed, false);
     function onpageload() {
       getChannels();
       getConnected();
@@ -200,7 +201,6 @@
       remote();
       setvolume();
       browseListener();
-      document.addEventListener('keyup', key_pressed, false);
     }
 
     function playerEvents() {
