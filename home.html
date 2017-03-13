@@ -198,6 +198,7 @@
       setCurrentlyWatching();
       remote();
       setvolume();
+      browseListener();
     }
 
     function playerEvents() {
@@ -327,9 +328,9 @@
               toggleFullscreen();
             }
             break;
-          case 'browse':
-            console.log("remote browse");
-            browse();
+          case 'return_following':
+            console.log("remote return following");
+            returnBrowsing();
             break;
         }
         remoteref.remove();
@@ -459,12 +460,15 @@
         for(i = 0; i < parse.length; ++i) {
           document.getElementById("table-body").appendChild(createListItem(parse[i]));
         }
-
       });
-
-
     }
 
+    function browseListener() {
+      var gameref = db.ref('/users/' + username + '/game').on('value', function(snapshot) {
+        getGame(snapshot.val());
+        gameref.remove();
+      });
+    }
 
   </script>
 
