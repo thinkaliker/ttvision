@@ -629,4 +629,4 @@ app.listen(3000, function () {
 	console.log('ttVision listening on port 3000!');
 });
 
-//setInterval(checkHeartBeat, 30000);
+//setInterval(checkHeartBeat, 30000);s
