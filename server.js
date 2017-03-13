@@ -50,6 +50,7 @@ var user_list = {
 	access_token: [],
 }
 
+//Struct for user_leaf; holds relevant info to pass onto firebase.
 function user_data(name, auth_token, access_token, channels) {
 	this.name = name;
 	this.auth_token = auth_token;
@@ -71,6 +72,7 @@ function makeid()
     return text;
 }
 
+//Sync up user_list with firebase database.
 sync_database = function(user_list)
 {
 	console.log("Syncing with Firebase...");
@@ -209,7 +211,7 @@ writeUserDataUpdate = function(following_user_leaf)
 	console.log("Sending to firebase updated user channels for %s...", following_user_leaf.name);
 	console.log(JSON.stringify(following_user_leaf.channels));
 	
-	var newUserKey = firebase.database().ref('users/' + following_user_leaf.name).child('channels').setValue(following_user_leaf.channels);
+	var newUserKey = firebase.database().ref('users/' + following_user_leaf.name).child('channels').set(following_user_leaf.channels);
 	
 	sync_database(user_list);
 }
