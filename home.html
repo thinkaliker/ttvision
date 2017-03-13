@@ -465,8 +465,10 @@
 
     function browseListener() {
       var gameref = db.ref('/users/' + username + '/game').on('value', function(snapshot) {
-        getGame(snapshot.val());
-        gameref.remove();
+        if (snapshot.val() != null) {
+          getGame(snapshot.val());
+          gameref.remove();
+        }
       });
     }
 
