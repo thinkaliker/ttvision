@@ -203,32 +203,15 @@ writeUserData = function(user_leaf)
 	//user_list.mobile_key.push(user_snippet.mobile_key);
 }
 
+//Update channels for the user in following_user_leaf.name.
 writeUserDataUpdate = function(following_user_leaf)
 {
 	console.log("Sending to firebase updated user channels for %s...", following_user_leaf.name);
-	console.log(JSON.stringify(following_user_leaf));
-	/*firebase.database().ref('users/' + following_user_leaf.name).set({
-		auth_token: following_user_leaf.auth_token,
-		access_token: following_user_leaf.access_token,
-		channels: following_user_leaf.channels,
-		command: "",
-		current_channel: following_user_leaf.channels[0],
-		heartbeat: false,
-		muted: true,
-		volume: 1,
-	});*/
+	console.log(JSON.stringify(following_user_leaf.channels));
 	
 	var newUserKey = firebase.database().ref('users/' + following_user_leaf.name).child('channels').setValue(following_user_leaf.channels);
 	
 	sync_database(user_list);
-	//setTimeout(1000, function() {
-	//	sync_databse(user_list);
-	//});
-	//sync_database(user_list);
-	//Add name and mobile key as a local copy for validation in /remote later
-	//Maybe change this to update based on firebase values later
-	//user_list.name.push(user_snippet.name);
-	//user_list.mobile_key.push(user_snippet.mobile_key);
 }
 
 writeTopGames = function(top_game_arr)
@@ -625,8 +608,8 @@ router.get('/following', function(req, res) {
 			break;
 		}
 	}	
-	var following_channels = getFollowListUpdate(following_user_leaf);
-	res.json(following_channels);
+	getFollowListUpdate(following_user_leaf);
+	res.end();
 });
 
 app.use('/api', router);
