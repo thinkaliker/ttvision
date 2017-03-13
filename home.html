@@ -409,8 +409,8 @@
     }
 
     function getGame(game) {
-      console.log('game ' + game + ' requested');
-      fetch('http://ttvision.cc/api/browse?game=' + game).then(function (response){
+      console.log('game ' + encodeURI(game) + ' requested');
+      fetch('http://ttvision.cc/api/browse?game=' + encodeURI(game)).then(function (response){
         return response.json();
       }).then(function(j) {
         var channelref = db.ref('/users/' + username + '/channels');
