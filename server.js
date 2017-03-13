@@ -218,11 +218,6 @@ writeUserDataUpdate = function(following_user_leaf)
 		volume: 1,
 	});
 	
-	firebase.database().ref('IDs/' + user_leaf.auth_token).set({
-		username: user_leaf.name,
-	});
-	console.log("Adding: %s with mobile key: %s to user list...", user_leaf.name, mobile_key);
-	
 	sync_database(user_list);
 	//setTimeout(1000, function() {
 	//	sync_databse(user_list);
