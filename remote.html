@@ -155,7 +155,8 @@
     }
 
     function setBrowse(game) {
-      db.ref('/users/' + username + '/game').set(game);
+      db.ref('/users/' + username + '/game').set("" + game + "");
+      vex.closeAll();
     }
 
     function returnBrowsing() {
