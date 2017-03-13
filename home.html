@@ -439,9 +439,13 @@
     }
 
     function returnBrowsing() {
-      var channelref = db.ref('/users/' + username + '/channels').set(browsechannels);
-      getChannels();
-      vex.closeAll();
+      fetch('http://ttvision.cc/api/following?code=' + code).then(function (response) {
+        return response;
+      }).then(function(j) {
+        getChannels();
+        vex.closeAll();
+      });
+
     }
 
     function browse() {
