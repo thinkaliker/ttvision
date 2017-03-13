@@ -90,6 +90,9 @@
       max-height: 500px;
       overflow-y: scroll;
     }
+    .vol-label {
+      text-align: center;
+    }
   </style>
   <script type="text/javascript">
     var fbconfig = {
@@ -146,6 +149,19 @@
       vol = document.getElementById("vol").value;
       var tvol = vol / 100.0;
       db.ref('/users/' + username + '/volume').set(tvol);
+      if (vol < 10) {
+        document.getElementsByClassName("volume")[0].classList.add('fa-volume-off');
+        document.getElementsByClassName("volume")[0].classList.remove('fa-volume-up');
+        document.getElementsByClassName("volume")[0].classList.remove('fa-volume-down');
+      } else if (vol >= 10 && vol <= 60) {
+        document.getElementsByClassName("volume")[0].classList.remove('fa-volume-off');
+        document.getElementsByClassName("volume")[0].classList.remove('fa-volume-up');
+        document.getElementsByClassName("volume")[0].classList.add('fa-volume-down');
+      } else if (vol > 60) {
+        document.getElementsByClassName("volume")[0].classList.remove('fa-volume-off');
+        document.getElementsByClassName("volume")[0].classList.add('fa-volume-up');
+        document.getElementsByClassName("volume")[0].classList.remove('fa-volume-down');
+      }
     }
 
     function disconnect() {
@@ -220,8 +236,9 @@
 
         <a href="#" class="button remote-btn" id="mute" onclick="toggleMute()"><i class="fa fa-volume-off fa-lg"></i><i class="fa fa-ban fa-stack-lg"></i> Unmute</a>
 
+        <div class="vol-label">Volume <i class="fa fa-volume-off volume"></i></div>
         <input type="range" id="vol" min="0" max="100" oninput="updateVol()">
-        <div>Volume</div>
+
         <br />
         <br />
         <a href="#" class="button remote-btn" id="browse" onclick="browse()" ><i class="fa fa-list-ul"></i> Browse</a>
