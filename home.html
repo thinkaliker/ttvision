@@ -237,11 +237,7 @@
       setCurrentlyWatching();
     }
 
-    function setChannels(body) {
-      //add channels to local array
-      //data = JSON.parse(body);
-      //console.log('data ' + body)
-      channels = body.channels;
+    function resetPlayer() {
       channelidx = 0;
       player.setChannel(channels[channelidx]);
     }
@@ -251,6 +247,8 @@
       channelref.on('value', function(snapshot) {
         channels = snapshot.val();
         console.log("channels updated " + channels);
+        channelidx = 0;
+        resetPlayer();
       });
     }
 
@@ -416,9 +414,10 @@
         var channelref = db.ref('/users/' + username + '/channels');
         channelref.once('value').then(function(snapshot) {
           browsechannels = snapshot.val();
+          channelref.set(j.channels);
+          resetPlayer();
+          vex.closeAll();
         });
-        channelref.set(j.channels);
-        vex.closeAll();
       });
     }
 
