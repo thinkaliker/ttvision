@@ -180,6 +180,7 @@
     var connected = 'Not Connected'; //get from server
     var fullscreen = false;
     var volume;
+    var browsechannels = [];
 
     function onpageload() {
       getChannels();
@@ -412,7 +413,11 @@
       fetch('http://ttvision.cc/api/browse?game=' + game).then(function (response){
         return response.json();
       }).then(function(j) {
-        var channelref = db.ref('/users/' + username + '/channels').set(j.channels);
+        var channelref = db.ref('/users/' + username + '/channels');
+        channelref.once('value').then(function(snapshot) {
+          browsechannels = snapshot.val();
+        });
+        channelref.set(j.channels);
         vex.closeAll();
       });
     }
@@ -432,6 +437,7 @@
     }
 
     function returnBrowsing() {
+      var channelref = db.ref('/users/' + username + '/channels').set(browsechannels);
       getChannels();
       vex.closeAll();
     }
