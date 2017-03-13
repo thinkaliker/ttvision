@@ -116,6 +116,7 @@
     db.ref('/users/' + username + '/volume').once('value').then(function(snapshot) {
       vol = snapshot.val() * 100;
       document.getElementById("vol").value = vol;
+      updateVol();
     });
 
     function toggleFullscreen() {
