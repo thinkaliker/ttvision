@@ -63,7 +63,7 @@ function user_data(name, auth_token, access_token, channels) {
 function makeid()
 {
     var text = "";
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
     for( var i=0; i < 4; i++ )
         text += possible.charAt(Math.floor(Math.random() * possible.length));
@@ -87,6 +87,7 @@ sync_database = function(user_list)
 					//console.log("Previous iteration of user: %s found. Updating values...", snapshot.key);
 					user_list.mobile_key[i] = snapshot.child('mobile_key').val();
 					user_list.auth_token[i] = snapshot.child('auth_token').val();
+					user_list.access_token[i] = snapshot.child('access_token').val();
 					in_user_list = 1;
 					break;
 				}
@@ -97,6 +98,7 @@ sync_database = function(user_list)
 				user_list.name.push(snapshot.key);
 				user_list.mobile_key.push(snapshot.child('mobile_key').val());
 				user_list.auth_token.push(snapshot.child('auth_token').val());
+				user_list.access_token.push(snapshot.child('access_token').val());
 				//console.log("User: %s ", snapshot.key);
 				//console.log("Mobile_Key: %s", snapshot.child('mobile_key').val());
 				//console.log(snapshot.child('auth_token').val());
@@ -307,6 +309,63 @@ getFollowList = function(user_leaf)
     }
 	//Make GET Request
     request(options, callback);
+}
+
+//Get user's list of followed/subscribed streams using client's access_token.
+//Does not identify the username; assumes it is already given and proceeds directly to
+//update Firebase with the channel information.
+//Also returns a json containing the user channels.
+getFollowListUpdate = function(following_user_leaf)
+{
+	if(typeof following_user_leaf.name === "undefined")
+	{
+		console.log("Nothing in name. This should never happen.");
+	}
+	else
+	{
+		//GET Request Options
+		console.log('getFollowListUpdate: Retrieve user\'s list of followed/subscribed streams upon returning from "Following".');
+		var options = {
+			url: 'https://api.twitch.tv/kraken/streams/followed' + '?stream_type=all',
+			method: 'GET',
+			headers: {
+				'Client-ID': client_id,
+				'Authorization': 'OAuth ' + following_user_leaf.access_token,
+			},
+		}
+		//Handle GET Request
+		function callback(error, response, body) {
+			//console.log('Requesting user follow list...');
+			if(!error && response.statusCode == 200) {
+				var res = JSON.parse(body);
+				var stream_object = res.streams;
+				if(Object.keys(stream_object).length > 0)
+				{
+					for(var i = 0; i < Object.keys(stream_object).length; i++)
+					{
+						var channel = JSON.stringify(stream_object[i].channel.display_name).replace(/["]+/g, '');
+						//console.log(channel);
+						following_user_leaf.channels.push(channel);
+					}
+				}
+				else
+				{
+					console.log("No channels online for the user. Adding default channels.");
+					following_user_leaf.channels.push('food');
+					following_user_leaf.channels.push('monstercat');
+				}
+				writeUserData(following_user_leaf);
+				return following_user_leaf.channels;
+			}
+			else
+			{
+				console.log('Error: ' + response.statusCode);
+				console.log(body);
+			}
+		}
+		//Make GET Request
+		request(options, callback);
+	}
 }
 
 //Retrieve user access token from Twitch with passed in auth_token.
@@ -523,9 +582,23 @@ router.get('/browse', function(req, res) {
 });
 
 router.get('/following', function(req, res) {
-	var following_user_code = req.query.code;
-	console.log("User code: %s", following_user_code);
-	res.json(following_user_code);
+	var following_auth_code = req.query.code;
+	console.log("User code: %s", following_auth_code);
+	var following_user_leaf = new user_data;
+	for(var i = 0; i < user_list.auth_token.length; i++)
+	{
+		console.log("%s", user_list.auth_token[i]);
+		if(user_list.auth_token[i] == following_auth_code)
+		{
+			console.log("Found a match!");
+			following_user_leaf.name = user_list.name[i];
+			following_user_leaf.auth_token = user_list.auth_token[i];
+			following_user_leaf.access_token = user_list.access_token[i];
+			break;
+		}
+	}	
+	var following_channels = getFollowListUpdate(following_user_leaf);
+	res.json(following_channels);
 });
 
 app.use('/api', router);
