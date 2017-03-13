@@ -323,9 +323,15 @@
             toggleMute();
             break;
           case 'disconnect':
+            console.log("remote disconnect");
             if (fullscreen) {
               toggleFullscreen();
             }
+            break;
+          case 'browse':
+            console.log("remote browse");
+            browse();
+            break;
         }
         remoteref.remove();
       });
@@ -406,7 +412,7 @@
       fetch('http://ttvision.cc/api/browse?game=' + game).then(function (response){
         return response.json();
       }).then(function(j) {
-        var channelref = db.ref('/users/' + username + '/channels').set(j);
+        var channelref = db.ref('/users/' + username + '/channels').set(j.channels);
         vex.closeAll();
       });
     }
