@@ -471,7 +471,7 @@
       var gameref = db.ref('/users/' + username + '/game').on('value', function(snapshot) {
         if (snapshot.val() != null) {
           getGame(snapshot.val());
-          gameref.remove();
+          //gameref.remove();
         }
       });
     }
