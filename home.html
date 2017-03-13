@@ -181,6 +181,7 @@
     var fullscreen = false;
     var volume;
     var browsechannels = [];
+    var popup_mutex = false;
 
     function onpageload() {
       getChannels();
@@ -268,18 +269,24 @@
     }
 
     function connect() {
-      var keyref = db.ref('/users/' + username + '/mobile_key');
-      keyref.once('value').then(function(snapshot) {
-        mobile_key = String(snapshot.val());
-        console.log('mobile_key: ' + mobile_key);
-      });
+      if (!popup_mutex) {
+        popup_mutex = true;
+        var keyref = db.ref('/users/' + username + '/mobile_key');
+        keyref.once('value').then(function(snapshot) {
+          mobile_key = String(snapshot.val());
+          console.log('mobile_key: ' + mobile_key);
+        });
 
-      vex.dialog.alert({ unsafeMessage:
-                        '<h1>Connect a remote</h1>'+
-                        '<h2>Mobile key: <code>' + mobile_key + '</code></h2>' +
-                        '<ol><li>Open http://ttvision.cc/connect on your mobile device.</li><li>Enter your Twitch username and mobile key.</li><li>Press Connect.</li></ol>'+
-                        '<h2 id="connected">Remote: ' + connected + '</h2>'
-                       });
+        vex.dialog.alert({ unsafeMessage:
+                          '<h1>Connect a remote</h1>'+
+                          '<h2>Mobile key: <code>' + mobile_key + '</code></h2>' +
+                          '<ol><li>Open http://ttvision.cc/connect on your mobile device.</li><li>Enter your Twitch username and mobile key.</li><li>Press Connect.</li></ol>'+
+                          '<h2 id="connected">Remote: ' + connected + '</h2>',
+                          afterClose: function() {
+                            popup_mutex = false;
+                          }
+                         });
+      }
     }
 
     function setCurrentlyWatching() {
@@ -391,21 +398,27 @@
     }
 
     function help() {
-      vex.dialog.alert({ unsafeMessage:
-                        '<h1>Help</h1>'+
-                        'Use the left and right arrows to navigate through all your channels.<br />' +
-                        'Connect a phone by clicking the connect button and following the instructions.<br />'+
-                        '<h2>Keyboard Shortcuts</h2>' +
-                        '<code>&rarr;</code> - Next Channel<br />'+
-                        '<code>&larr;</code> - Previous Channel<br />'+
-                        '<code>&uarr;</code> - Volume Up<br />'+
-                        '<code>&darr;</code> - Volume Down<br />'+
-                        '<code>m</code> - Mute<br />'+
-                        '<code>c</code> - Connect<br />'+
-                        '<code>f</code> - Fullscreen<br />'+
-                        '<code>b</code> - Browse<br />'+
-                        '<code>h</code> - Help (this popup!)<br />'
-                      });
+      if (!popup_mutex) {
+        popup_mutex = true;
+        vex.dialog.alert({ unsafeMessage:
+                          '<h1>Help</h1>'+
+                          'Use the left and right arrows to navigate through all your channels.<br />' +
+                          'Connect a phone by clicking the connect button and following the instructions.<br />'+
+                          '<h2>Keyboard Shortcuts</h2>' +
+                          '<code>&rarr;</code> - Next Channel<br />'+
+                          '<code>&larr;</code> - Previous Channel<br />'+
+                          '<code>&uarr;</code> - Volume Up<br />'+
+                          '<code>&darr;</code> - Volume Down<br />'+
+                          '<code>m</code> - Mute<br />'+
+                          '<code>c</code> - Connect<br />'+
+                          '<code>f</code> - Fullscreen<br />'+
+                          '<code>b</code> - Browse<br />'+
+                          '<code>h</code> - Help (this popup!)<br />',
+                          afterClose: function() {
+                            popup_mutex = false;
+                          }
+                        });
+      }
     }
 
     function getGame(game) {
@@ -448,14 +461,20 @@
     }
 
     function browse() {
-      vex.dialog.alert({ unsafeMessage:
-                        '<h1>Browse</h1>'+
-                        '<div id="browse">'+
-                        '<a class="button" href="#" onclick="returnBrowsing()">Return to Following</a>'+
-                        '<table id="list">'+
-                        '<thead><tr><th>Game</th><tr></thead>'+
-                        '<tbody id="table-body"><tbody></table></div>'
-                       });
+      if (!popup_mutex) {
+        popup_mutex = true;
+        vex.dialog.alert({ unsafeMessage:
+                          '<h1>Browse</h1>'+
+                          '<div id="browse">'+
+                          '<a class="button" href="#" onclick="returnBrowsing()">Return to Following</a>'+
+                          '<table id="list">'+
+                          '<thead><tr><th>Game</th><tr></thead>'+
+                          '<tbody id="table-body"><tbody></table></div>',
+                          afterClose: function() {
+                            popup_mutex = false;
+                          }
+                         });
+      }
 
       var games = db.ref('/games').once('value').then(function(snapshot) {
         var parse = snapshot.val();
