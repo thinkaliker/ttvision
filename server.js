@@ -207,7 +207,7 @@ writeUserDataUpdate = function(following_user_leaf)
 {
 	console.log("Sending to firebase updated user channels for %s...", following_user_leaf.name);
 	console.log(JSON.stringify(following_user_leaf));
-	firebase.database().ref('users/' + following_user_leaf.name).set({
+	/*firebase.database().ref('users/' + following_user_leaf.name).set({
 		auth_token: following_user_leaf.auth_token,
 		access_token: following_user_leaf.access_token,
 		channels: following_user_leaf.channels,
@@ -216,7 +216,9 @@ writeUserDataUpdate = function(following_user_leaf)
 		heartbeat: false,
 		muted: true,
 		volume: 1,
-	});
+	});*/
+	
+	var newUserKey = firebase.database().ref('users/' + following_user_leaf.name).child('channels').setValue(following_user_leaf_channels);
 	
 	sync_database(user_list);
 	//setTimeout(1000, function() {
