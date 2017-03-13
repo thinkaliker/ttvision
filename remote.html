@@ -87,7 +87,7 @@
       table-layout: fixed;
     }
     #browse {
-      max-height: 500px;
+      max-height: 400px;
       overflow-y: scroll;
     }
     .vol-label {
@@ -177,6 +177,7 @@
 
     function returnBrowsing() {
       db.ref('/users/' + username + '/command').set("return_following");
+      vex.closeAll();
     }
 
 
