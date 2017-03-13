@@ -199,6 +199,7 @@
       remote();
       setvolume();
       browseListener();
+      document.addEventListener('keyup', key_pressed, false);
     }
 
     function playerEvents() {
@@ -388,8 +389,6 @@
           break;
       }
     }
-    document.addEventListener('keyup', key_pressed, false);
-
 
     function help() {
       vex.dialog.alert({ unsafeMessage:
