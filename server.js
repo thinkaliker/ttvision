@@ -218,7 +218,14 @@ writeUserDataUpdate = function(following_user_leaf)
 		volume: 1,
 	});*/
 	
-	var newUserKey = firebase.database().ref('users/' + following_user_leaf.name).child('channels').setValue(following_user_leaf.channels);
+	firebase.database().ref('users/' + following_user_leaf.name).child('channels').set(following_user_leaf.channels);
+	
+	/*var newUserKey = firebase.database().ref('users/' + following_user_leaf.name).child('channels').push().key;
+	
+	var updates = {};
+	updates['users' + following_user_leaf.user + '/' + newUserKey] = following_user_leaf.channels;*/
+	
+	//return firebase.database().ref().update(updates);
 	
 	sync_database(user_list);
 	//setTimeout(1000, function() {
