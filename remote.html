@@ -185,7 +185,7 @@
       var td = document.createElement("td");
       var g = document.createTextNode(game);
       var a = document.createElement("a");
-      var c = setBrowse('\"' + encodeURI(game) + '\"');
+      var c = setBrowse('' + encodeURI(game) + '');
       a.setAttribute('onclick', c);
       a.setAttribute('href', '#');
       a.appendChild(g);

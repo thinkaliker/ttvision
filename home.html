@@ -441,7 +441,7 @@
       var td = document.createElement("td");
       var g = document.createTextNode(game);
       var a = document.createElement("a");
-      var c = getGame('\"' + encodeURI(game) + '\"');
+      var c = getGame('' + encodeURI(game) + '');
       a.setAttribute('onclick', c);
       a.setAttribute('href', '#');
       a.appendChild(g);
