@@ -286,7 +286,7 @@ getFollowList = function(user_leaf)
 			{
 				for(var i = 0; i < Object.keys(stream_object).length; i++)
 				{
-					var channel = JSON.stringify(stream_object[i].channel.display_name).replace(/["]+/g, '');
+					var channel = JSON.stringify(stream_object[i].channel.name).replace(/["]+/g, '');
 					//console.log(channel);
 					user_leaf.channels.push(channel);
 				}
@@ -457,7 +457,7 @@ router.get('/browse', function(req, res) {
 				{
 					for(var i = 0; i < Object.keys(featured_object).length; i++)
 					{
-						var featured_channel_object = JSON.stringify(featured_object[i].stream.channel.display_name).replace(/["]+/g, '');
+						var featured_channel_object = JSON.stringify(featured_object[i].stream.channel.name).replace(/["]+/g, '');
 						//console.log(featured_channel_object);
 						featured_channels_arr.channels.push(featured_channel_object);
 					}
@@ -500,7 +500,7 @@ router.get('/browse', function(req, res) {
 				{
 					for(var i = 0; i < Object.keys(streams_object).length; i++)
 					{
-						var channel_object = JSON.stringify(streams_object[i].channel.display_name).replace(/["]+/g, '');
+						var channel_object = JSON.stringify(streams_object[i].channel.name).replace(/["]+/g, '');
 						//console.log(channel_object);
 						channels_arr.channels.push(channel_object);
 					}
