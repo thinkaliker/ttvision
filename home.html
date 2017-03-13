@@ -13,7 +13,10 @@
   <script src="http://player.twitch.tv/js/embed/v1.js"></script>
   <script src="https://www.gstatic.com/firebasejs/3.6.10/firebase.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vex-js/3.0.0/js/vex.combined.min.js"></script>
-  <script>vex.defaultOptions.className = 'vex-theme-default'</script>
+  <script>
+    vex.defaultOptions.className = 'vex-theme-default';
+    vex.dialog.buttons.YES.text = 'Close';
+  </script>
 
   <style>
     body {
@@ -30,6 +33,13 @@
       width: 100vw !important;
       height: 100vh !important;
       padding: 0px !important;
+    }
+    .sidebar {
+      position: absolute;
+      top: 0px;
+      right: 10px;
+      margin: 10px;
+      padding: 10px;
     }
     .fullscreen-hidden {
       display: none;
@@ -134,6 +144,9 @@
     </div>
   </div>
 
+  <div class="sidebar">
+    <a class="button" href="#" onclick="browse()"><i class="fa fa-bars"></i> browse</a>
+  </div>
 
   <div id="menubar" class="container">
     <div class="row">
@@ -272,11 +285,13 @@
         document.querySelector("#header").classList.add("fullscreen-hidden");
         document.querySelector("#menubar").classList.add("fullscreen-hidden");
         document.querySelector("#main-player").classList.add("fullscreen");
+        document.querySelector(".sidebar").classList.add("fullscreen-hidden");
         fullscreen = true;
       } else {
         document.querySelector("#header").classList.remove("fullscreen-hidden");
         document.querySelector("#menubar").classList.remove("fullscreen-hidden");
         document.querySelector("#main-player").classList.remove("fullscreen");
+        document.querySelector(".sidebar").classList.remove("fullscreen-hidden");
         fullscreen = false;
       }
     }
@@ -371,6 +386,26 @@
                         '<code>c</code> - Connect<br />'+
                         '<code>f</code> - Fullscreen<br />'
                  });
+    }
+
+    function createListItem(game) {
+      var tr = document.createElement("tr");
+      var td = document.createElement("td");
+      var g = document.createTextNode(game);
+      td.appendChild(g);
+      tr.appendChild(td);
+      return tr;
+    }
+
+    function browse() {
+      vex.dialog.alert({ unsafeMessage:
+                        '<h1>Browse</h1>'+
+                        '<div id="browse"><table id="list">'+
+                        '<thead><tr><th>Game</th><tr></thead>'+
+                        '<tbody id="table-body"><tbody></table></div>'
+                       });
+      var row = createListItem("vidoe gem");
+      document.getElementById("table-body").appendChild(row);
     }
 
 
