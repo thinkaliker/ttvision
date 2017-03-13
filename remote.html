@@ -171,7 +171,7 @@
     }
 
     function setBrowse(game) {
-      db.ref('/users/' + username + '/game').set("" + game + "");
+      db.ref('/users/' + username + '/game').set(game);
       vex.closeAll();
     }
 
@@ -186,7 +186,7 @@
       var g = document.createTextNode(game);
       var a = document.createElement("a");
       var s = encodeURI(game).replace(/'/g, "\\'");
-      var c = 'setBrowse(' + s + ');';
+      var c = 'setBrowse(\"' + s + '\");';
       a.setAttribute('onclick', c);
       a.setAttribute('href', '#');
       a.appendChild(g);

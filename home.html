@@ -442,7 +442,7 @@
       var g = document.createTextNode(game);
       var a = document.createElement("a");
       var s = encodeURI(game).replace(/'/g, "\\'");
-      var c = 'getGame(' + s + ');';
+      var c = 'getGame(\"' + s + '\");';
       a.setAttribute('onclick', c);
       a.setAttribute('href', '#');
       a.appendChild(g);
