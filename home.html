@@ -51,6 +51,13 @@
     .vex-dialog-button-primary {
       background-color: #9b4dca !important;
     }
+    table {
+      table-layout: fixed;
+    }
+    #browse {
+      max-height: 500px;
+      overflow-y: scroll;
+    }
     .hide {
       display: none;
     }
@@ -244,7 +251,6 @@
         channels = snapshot.val();
         console.log("channels updated " + channels);
       });
-
     }
 
     function getConnected() {
@@ -277,7 +283,6 @@
 
     function setCurrentlyWatching() {
       db.ref('/users/' + username + '/current_channel').set(channels[channelidx]);
-
     }
 
     function toggleFullscreen() {
@@ -367,6 +372,14 @@
           //down, vol down
           setdbvol(-0.1);
           break;
+        case 66:
+          //b, browse
+          browse();
+          break;
+        case 72:
+          //h, help
+          help();
+          break;
       }
     }
     document.addEventListener('keyup', key_pressed, false);
@@ -385,27 +398,58 @@
                         '<code>m</code> - Mute<br />'+
                         '<code>c</code> - Connect<br />'+
                         '<code>f</code> - Fullscreen<br />'
-                 });
+                      });
+    }
+
+    function getGame(game) {
+      console.log('game ' + game + ' requested');
+      fetch('http://ttvision.cc/api/browse?game=' + game).then(function (response){
+        return response.json();
+      }).then(function(j) {
+        var channelref = db.ref('/users/' + username + '/channels').set(j);
+        vex.closeAll();
+      });
     }
 
     function createListItem(game) {
       var tr = document.createElement("tr");
       var td = document.createElement("td");
       var g = document.createTextNode(game);
-      td.appendChild(g);
+      var a = document.createElement("a");
+      var c = "getGame(\'" + game + "\')";
+      a.setAttribute('onclick', c);
+      a.setAttribute('href', '#');
+      a.appendChild(g);
+      td.appendChild(a);
       tr.appendChild(td);
       return tr;
+    }
+
+    function returnBrowsing() {
+      getChannels();
+      vex.closeAll();
     }
 
     function browse() {
       vex.dialog.alert({ unsafeMessage:
                         '<h1>Browse</h1>'+
-                        '<div id="browse"><table id="list">'+
+                        '<div id="browse">'+
+                        '<a class="button" href="#" onclick="returnBrowsing()">Return to Following</a>'+
+                        '<table id="list">'+
                         '<thead><tr><th>Game</th><tr></thead>'+
                         '<tbody id="table-body"><tbody></table></div>'
                        });
-      var row = createListItem("vidoe gem");
-      document.getElementById("table-body").appendChild(row);
+
+      var games = db.ref('/games').once('value').then(function(snapshot) {
+        var parse = snapshot.val();
+        var i;
+        for(i = 0; i < parse.length; ++i) {
+          document.getElementById("table-body").appendChild(createListItem(parse[i]));
+        }
+
+      });
+
+
     }
 
 
