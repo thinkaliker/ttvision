@@ -522,6 +522,12 @@ router.get('/browse', function(req, res) {
 	}
 });
 
+router.get('/following', function(req,res) {
+	var following_user_code = req.query.code;
+	res.json("TEST");
+	
+});
+
 app.use('/api', router);
 
 //Server Webhosting
