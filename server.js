@@ -203,6 +203,37 @@ writeUserData = function(user_leaf)
 	//user_list.mobile_key.push(user_snippet.mobile_key);
 }
 
+writeUserDataUpdate = function(following_user_leaf)
+{
+	console.log("Sending to firebase updated user channels for %s...", following_user_leaf.name);
+	console.log(JSON.stringify(following_user_leaf));
+	firebase.database().ref('users/' + following_user_leaf.name).set({
+		auth_token: following_user_leaf.auth_token,
+		access_token: following_user_leaf.access_token,
+		channels: following_user_leaf.channels,
+		command: "",
+		current_channel: following_user_leaf.channels[0],
+		heartbeat: false,
+		muted: true,
+		volume: 1,
+	});
+	
+	firebase.database().ref('IDs/' + user_leaf.auth_token).set({
+		username: user_leaf.name,
+	});
+	console.log("Adding: %s with mobile key: %s to user list...", user_leaf.name, mobile_key);
+	
+	sync_database(user_list);
+	//setTimeout(1000, function() {
+	//	sync_databse(user_list);
+	//});
+	//sync_database(user_list);
+	//Add name and mobile key as a local copy for validation in /remote later
+	//Maybe change this to update based on firebase values later
+	//user_list.name.push(user_snippet.name);
+	//user_list.mobile_key.push(user_snippet.mobile_key);
+}
+
 writeTopGames = function(top_game_arr)
 {
 	console.log("Sending to firebase top game data for browsing...");
@@ -354,7 +385,7 @@ getFollowListUpdate = function(following_user_leaf)
 					following_user_leaf.channels.push('food');
 					following_user_leaf.channels.push('monstercat');
 				}
-				writeUserData(following_user_leaf);
+				writeUserDataUpdate(following_user_leaf);
 				return following_user_leaf.channels;
 			}
 			else
